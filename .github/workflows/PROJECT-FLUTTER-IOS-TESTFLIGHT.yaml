@@ -278,13 +278,20 @@ jobs:
           p12-file-base64: ${{ secrets.APPLE_CERTIFICATE_BASE64 }}
           p12-password: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
 
-      - name: Install Provisioning Profile
+      - name: Install Provisioning Profiles (Main App + Share Extension)
         run: |
-          echo "${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}" | base64 --decode > profile.mobileprovision
+          # 메인 앱 프로비저닝 프로파일 설치
+          echo "${{ secrets.APPLE_PROVISIONING_PROFILE_BASE64 }}" | base64 --decode > profile_main.mobileprovision
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
-          uuid=$(grep -A1 -a "UUID" profile.mobileprovision | grep string | sed -e "s/<string>//" -e "s/<\/string>//" -e "s/[[:space:]]//g")
-          cp profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$uuid.mobileprovision
+          uuid_main=$(grep -A1 -a "UUID" profile_main.mobileprovision | grep string | sed -e "s/<string>//" -e "s/<\/string>//" -e "s/[[:space:]]//g")
+          cp profile_main.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$uuid_main.mobileprovision
+          echo "✅ 메인 앱 프로파일 설치 완료: ${{ secrets.IOS_PROVISIONING_PROFILE_NAME }}"
+
+          # Share Extension 프로비저닝 프로파일 설치
+          echo "${{ secrets.APPLE_PROVISIONING_PROFILE_SHARE_BASE64 }}" | base64 --decode > profile_share.mobileprovision
+          uuid_share=$(grep -A1 -a "UUID" profile_share.mobileprovision | grep string | sed -e "s/<string>//" -e "s/<\/string>//" -e "s/[[:space:]]//g")
+          cp profile_share.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$uuid_share.mobileprovision
+          echo "✅ Share Extension 프로파일 설치 완료: ${{ secrets.IOS_PROVISIONING_PROFILE_SHARE_NAME }}"
 
       - name: Verify ExportOptions.plist
         run: |

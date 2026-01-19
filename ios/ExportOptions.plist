@@ -10,6 +10,8 @@
     <dict>
         <key>com.elipair.mapsy</key>
         <string>MapSy-AppStore-2026</string>
+        <key>com.elipair.mapsy.share</key>
+        <string>MapSy-Share-AppStore-2026</string>
     </dict>
     <key>signingStyle</key>
     <string>manual</string>
