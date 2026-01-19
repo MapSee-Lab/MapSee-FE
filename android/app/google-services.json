@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "993358352828-11kj7k5ngu85ug0f36c721kcf6cdmopn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.elipair.mapsy",
+            "certificate_hash": "e13050be6fe15f12926f1dd683225144b8760ebb"
+          }
+        },
+        {
           "client_id": "993358352828-p76ccqmp4dr5ll9uflkafntra3aeif5o.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "993358352828-p76ccqmp4dr5ll9uflkafntra3aeif5o.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "993358352828-esehccg0b6bb1lo1gof18sqvr1ndo1rr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mapsy"
+              }
             }
           ]
         }

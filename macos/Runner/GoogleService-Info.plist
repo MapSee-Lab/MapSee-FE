@@ -3,11 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>993358352828-r94b43fq3lmgujstp2i5bpq1j4s8ijga.apps.googleusercontent.com</string>
+	<string>993358352828-esehccg0b6bb1lo1gof18sqvr1ndo1rr.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.993358352828-r94b43fq3lmgujstp2i5bpq1j4s8ijga</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>993358352828-11kj7k5ngu85ug0f36c721kcf6cdmopn.apps.googleusercontent.com</string>
+	<string>com.googleusercontent.apps.993358352828-esehccg0b6bb1lo1gof18sqvr1ndo1rr</string>
 	<key>API_KEY</key>
 	<string>AIzaSyB3zcZ7KiHbxHquaAD07zQ94-TY_ypV_IE</string>
 	<key>GCM_SENDER_ID</key>
@@ -15,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.elipair.mapsy</string>
+	<string>com.example.mapsy</string>
 	<key>PROJECT_ID</key>
 	<string>mapsy-40e92</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:993358352828:ios:c0dabea82eebf2789b5bb9</string>
+	<string>1:993358352828:ios:37ff835d682dc7199b5bb9</string>
 </dict>
 </plist>
