@@ -9,15 +9,8 @@
     <!-- 진동 권한 (알림 시 진동) -->
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <!-- 부팅 시 알림 재등록 (flutter_local_notifications) -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <!-- Wake Lock (알림 표시 시 화면 활성화) -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <!-- 정확한 알람 권한 (Android 12+, 정확한 시간 알림) -->
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
 
     <application
         android:label="mapsy"
@@ -50,18 +43,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-
-        <!-- 부팅 완료 시 알림 재등록을 위한 리시버 -->
-        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <!-- 로컬 알림 수신 리시버 -->
-        <receiver android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver"
-            android:exported="false" />
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
