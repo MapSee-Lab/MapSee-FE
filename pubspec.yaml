@@ -1,7 +1,7 @@
 name: mapsy
 description: "MapSy - Flutter Application"
 publish_to: "none"
-version: 1.0.9+9
+version: 1.0.10+10
 environment:
   sdk: ^3.9.2
 dependencies:
