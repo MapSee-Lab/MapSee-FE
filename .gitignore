@@ -33,6 +33,9 @@ migrate_working_dir/
 /build/
 /coverage/
 
+# iOS CI/CD generated files
+ios/ExportOptions.plist
+
 # Symbolication related
 app.*.symbols
 

@@ -1,11 +1,34 @@
 {
   "metadata": {
-    "lastUpdated": "2026-01-19T11:49:01Z",
-    "currentVersion": "1.0.10",
+    "lastUpdated": "2026-01-19T13:27:22Z",
+    "currentVersion": "1.0.13",
     "projectType": "flutter",
-    "totalReleases": 3
+    "totalReleases": 4
   },
   "releases": [
+    {
+      "version": "1.0.13",
+      "project_type": "flutter",
+      "date": "2026-01-19",
+      "pr_number": 8,
+      "raw_summary": "## Summary by CodeRabbit\n\n## 릴리스 노트\n\n* **버전 업데이트**\n  * 버전을 1.0.13으로 업데이트했습니다.\n\n* **개선 사항**\n  * iOS 빌드 프로세스 및 코드 서명 방식을 개선하여 더욱 안정적인 배포를 지원합니다.\n  * 프로비저닝 프로필 관리 및 추출 로직을 최적화했습니다.",
+      "parsed_changes": {
+        "버전_업데이트": {
+          "title": "버전 업데이트",
+          "items": [
+            "버전을 1.0.13으로 업데이트했습니다."
+          ]
+        },
+        "개선_사항": {
+          "title": "개선 사항",
+          "items": [
+            "iOS 빌드 프로세스 및 코드 서명 방식을 개선하여 더욱 안정적인 배포를 지원합니다.",
+            "프로비저닝 프로필 관리 및 추출 로직을 최적화했습니다."
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "1.0.10",
       "project_type": "flutter",
