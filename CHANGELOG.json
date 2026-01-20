@@ -1,11 +1,40 @@
 {
   "metadata": {
-    "lastUpdated": "2026-01-19T14:31:11Z",
-    "currentVersion": "1.0.14",
+    "lastUpdated": "2026-01-20T05:22:50Z",
+    "currentVersion": "1.0.16",
     "projectType": "flutter",
-    "totalReleases": 5
+    "totalReleases": 6
   },
   "releases": [
+    {
+      "version": "1.0.16",
+      "project_type": "flutter",
+      "date": "2026-01-20",
+      "pr_number": 12,
+      "raw_summary": "## Summary by CodeRabbit\n\n## 릴리스 노트\n\n* **새로운 기능**\n  * 개발 문서 및 빠른 참조 가이드 추가\n\n* **개선 사항**\n  * iOS 최소 배포 대상 업데이트 (iOS 15.0 이상 필요)\n  * 빌드 도구 및 워크플로우 최적화\n\n* **버전**\n  * v1.0.16으로 업데이트",
+      "parsed_changes": {
+        "새로운_기능": {
+          "title": "새로운 기능",
+          "items": [
+            "개발 문서 및 빠른 참조 가이드 추가"
+          ]
+        },
+        "개선_사항": {
+          "title": "개선 사항",
+          "items": [
+            "iOS 최소 배포 대상 업데이트 (iOS 15.0 이상 필요)",
+            "빌드 도구 및 워크플로우 최적화"
+          ]
+        },
+        "버전": {
+          "title": "버전",
+          "items": [
+            "v1.0.16으로 업데이트"
+          ]
+        }
+      },
+      "parse_method": "markdown"
+    },
     {
       "version": "1.0.14",
       "project_type": "flutter",
