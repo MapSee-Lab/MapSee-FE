@@ -1,6 +1,40 @@
 import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+import 'device_id_manager.dart';
+
+part 'device_info_service.g.dart';
+
+/// DeviceInfoService Provider
+@riverpod
+DeviceInfoService deviceInfoService(Ref ref) {
+  return DeviceInfoService();
+}
+
+/// 기기 정보 데이터 클래스
+class DeviceInfo {
+  final String deviceName;
+  final String deviceType;
+  final String deviceId;
+  final String osVersion;
+  final bool isPhysicalDevice;
+
+  const DeviceInfo({
+    required this.deviceName,
+    required this.deviceType,
+    required this.deviceId,
+    required this.osVersion,
+    required this.isPhysicalDevice,
+  });
+
+  @override
+  String toString() {
+    return 'DeviceInfo(name: $deviceName, type: $deviceType, id: $deviceId, os: $osVersion, physical: $isPhysicalDevice)';
+  }
+}
 
 /// 기기 정보 수집 서비스
 ///
@@ -170,5 +204,25 @@ class DeviceInfoService {
       debugPrint('⚠️ DeviceInfoService: 기기 타입 확인 실패 - $e');
       return false;
     }
+  }
+
+  /// 백엔드 로그인용 기기 정보를 수집합니다
+  ///
+  /// 기기 이름, 타입, 고유 ID, OS 버전 등을 한 번에 수집합니다.
+  /// 로그인 시 FCM 토큰과 함께 백엔드에 전송됩니다.
+  Future<DeviceInfo> getDeviceInfo() async {
+    final deviceName = await getDeviceName();
+    final deviceType = getDeviceType();
+    final deviceId = await DeviceIdManager.getOrCreateDeviceId();
+    final osVersion = await getOSVersion();
+    final physical = await isPhysicalDevice();
+
+    return DeviceInfo(
+      deviceName: deviceName,
+      deviceType: deviceType,
+      deviceId: deviceId,
+      osVersion: osVersion,
+      isPhysicalDevice: physical,
+    );
   }
 }

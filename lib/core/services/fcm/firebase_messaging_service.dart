@@ -1,9 +1,20 @@
 import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
 import 'local_notifications_service.dart';
 import '../device/device_info_service.dart';
 import '../device/device_id_manager.dart';
+
+part 'firebase_messaging_service.g.dart';
+
+/// FirebaseMessagingService Provider
+@riverpod
+FirebaseMessagingService firebaseMessagingService(Ref ref) {
+  return FirebaseMessagingService.instance();
+}
 
 /// Firebase Cloud Messaging 서비스
 /// FCM 푸시 알림을 관리하고 메시지를 처리합니다

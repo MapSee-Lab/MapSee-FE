@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/spacing_and_radius.dart';
 import '../../../../core/constants/text_styles.dart';
 import '../../../../core/errors/app_exception.dart';
+import '../../../../router/route_paths.dart';
+import '../../data/models/sign_in_response.dart';
 import '../providers/auth_provider.dart';
 
 /// Google 로그인 화면
@@ -18,8 +21,8 @@ class LoginPage extends ConsumerWidget {
   ///
   /// Google 로그인을 수행하고 에러 발생 시 SnackBar를 표시합니다.
   Future<void> _handleGoogleSignIn(BuildContext context, WidgetRef ref) async {
-    // AuthNotifier로 로그인 수행
-    await ref.read(authNotifierProvider.notifier).signInWithGoogle();
+    // AuthNotifier로 로그인 수행 (백엔드 응답 포함)
+    final signInResponse = await ref.read(authNotifierProvider.notifier).signInWithGoogle();
 
     // 에러 체크 및 SnackBar 표시
     if (!context.mounted) return;
@@ -31,7 +34,6 @@ class LoginPage extends ConsumerWidget {
           ? (authState.error as AuthException).message
           : '로그인 중 오류가 발생했습니다.';
 
-      //TODO: 스낵바 나중에 디자인 만들어지면 바뀌어야함.
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(errorMessage, style: AppTextStyles.toast),
@@ -40,17 +42,21 @@ class LoginPage extends ConsumerWidget {
           duration: const Duration(seconds: 3),
         ),
       );
+      return;
     }
 
-    // 성공 시 GoRouter가 자동으로 HomePage로 리다이렉트
+    // 로그인 성공 시 온보딩 여부에 따라 리다이렉트
+    if (signInResponse != null) {
+      _navigateAfterLogin(context, signInResponse);
+    }
   }
 
   /// Apple 로그인 버튼 핸들러
   ///
   /// Apple 로그인을 수행하고 에러 발생 시 SnackBar를 표시합니다.
   Future<void> _handleAppleSignIn(BuildContext context, WidgetRef ref) async {
-    // AuthNotifier로 로그인 수행
-    await ref.read(authNotifierProvider.notifier).signInWithApple();
+    // AuthNotifier로 로그인 수행 (백엔드 응답 포함)
+    final signInResponse = await ref.read(authNotifierProvider.notifier).signInWithApple();
 
     // 에러 체크 및 SnackBar 표시
     if (!context.mounted) return;
@@ -62,7 +68,6 @@ class LoginPage extends ConsumerWidget {
           ? (authState.error as AuthException).message
           : 'Apple 로그인 중 오류가 발생했습니다.';
 
-      //TODO: 스낵바 나중에 디자인 만들어지면 바뀌어야함.
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(errorMessage, style: AppTextStyles.toast),
@@ -71,9 +76,43 @@ class LoginPage extends ConsumerWidget {
           duration: const Duration(seconds: 3),
         ),
       );
+      return;
     }
 
-    // 성공 시 GoRouter가 자동으로 HomePage로 리다이렉트
+    // 로그인 성공 시 온보딩 여부에 따라 리다이렉트
+    if (signInResponse != null) {
+      _navigateAfterLogin(context, signInResponse);
+    }
+  }
+
+  /// 로그인 성공 후 네비게이션 처리
+  ///
+  /// 온보딩 필요 여부에 따라 적절한 화면으로 이동합니다.
+  void _navigateAfterLogin(BuildContext context, SignInResponse response) {
+    if (response.requiresOnboarding) {
+      // 온보딩이 필요한 경우 현재 단계로 이동
+      final step = OnboardingStep.fromString(response.onboardingStep);
+      switch (step) {
+        case OnboardingStep.terms:
+          context.go(RoutePaths.onboardingTerms);
+          break;
+        case OnboardingStep.birthDate:
+          context.go(RoutePaths.onboardingBirthDate);
+          break;
+        case OnboardingStep.gender:
+          context.go(RoutePaths.onboardingGender);
+          break;
+        case OnboardingStep.nickname:
+          context.go(RoutePaths.onboardingNickname);
+          break;
+        case OnboardingStep.completed:
+          context.go(RoutePaths.home);
+          break;
+      }
+    } else {
+      // 온보딩이 완료된 경우 홈으로 이동
+      context.go(RoutePaths.home);
+    }
   }
 
   @override

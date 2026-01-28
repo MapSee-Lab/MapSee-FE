@@ -80,3 +80,13 @@ ios/fastlane/*.p12
 # Android CI/CD - 민감한 파일 (자동 생성됨)
 android/fastlane/service-account.json
 
+# macOS CocoaPods - 자동 생성 파일
+macos/Pods/
+macos/Podfile.lock
+macos/.symlinks/
+macos/Flutter/ephemeral/
+
+# iOS CocoaPods - 자동 생성 파일
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/ephemeral/

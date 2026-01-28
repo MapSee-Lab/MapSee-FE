@@ -41,6 +41,18 @@ class RoutePaths {
   /// 온보딩 화면 (첫 로그인 시: 이용약관 동의, 닉네임 설정 등)
   static const String onboarding = '/onboarding';
 
+  /// 온보딩 - 약관 동의
+  static const String onboardingTerms = '/onboarding/terms';
+
+  /// 온보딩 - 생년월일
+  static const String onboardingBirthDate = '/onboarding/birth-date';
+
+  /// 온보딩 - 성별
+  static const String onboardingGender = '/onboarding/gender';
+
+  /// 온보딩 - 닉네임
+  static const String onboardingNickname = '/onboarding/nickname';
+
   /// 홈 화면 (인증 필수, 메인 기능 진입점)
   static const String home = '/home';
 
@@ -52,5 +64,9 @@ class RoutePaths {
   static const String splashName = 'splash';
   static const String loginName = 'login';
   static const String onboardingName = 'onboarding';
+  static const String onboardingTermsName = 'onboarding-terms';
+  static const String onboardingBirthDateName = 'onboarding-birth-date';
+  static const String onboardingGenderName = 'onboarding-gender';
+  static const String onboardingNicknameName = 'onboarding-nickname';
   static const String homeName = 'home';
 }
