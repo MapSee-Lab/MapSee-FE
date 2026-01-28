@@ -5,72 +5,17 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../../core/errors/app_exception.dart';
+import '../../../auth/domain/entities/onboarding_step.dart';
 import '../../data/models/gender_request.dart';
 import '../../data/models/profile_request.dart';
 import '../../data/repositories/onboarding_repository_impl.dart';
 import '../../domain/repositories/onboarding_repository.dart';
 
+// OnboardingStep re-export for convenience
+export '../../../auth/domain/entities/onboarding_step.dart';
+
 part 'onboarding_provider.freezed.dart';
 part 'onboarding_provider.g.dart';
-
-/// 온보딩 단계 열거형
-enum OnboardingStep {
-  terms,
-  birthDate,
-  gender,
-  nickname,
-  completed;
-
-  /// 문자열에서 OnboardingStep으로 변환
-  static OnboardingStep fromString(String? step) {
-    switch (step?.toUpperCase()) {
-      case 'TERMS':
-        return OnboardingStep.terms;
-      case 'BIRTH_DATE':
-        return OnboardingStep.birthDate;
-      case 'GENDER':
-        return OnboardingStep.gender;
-      case 'NICKNAME':
-        return OnboardingStep.nickname;
-      case 'COMPLETED':
-        return OnboardingStep.completed;
-      default:
-        return OnboardingStep.terms;
-    }
-  }
-
-  /// 다음 단계 반환
-  OnboardingStep? get next {
-    switch (this) {
-      case OnboardingStep.terms:
-        return OnboardingStep.birthDate;
-      case OnboardingStep.birthDate:
-        return OnboardingStep.gender;
-      case OnboardingStep.gender:
-        return OnboardingStep.nickname;
-      case OnboardingStep.nickname:
-        return OnboardingStep.completed;
-      case OnboardingStep.completed:
-        return null;
-    }
-  }
-
-  /// 단계 인덱스 (0-3)
-  int get index {
-    switch (this) {
-      case OnboardingStep.terms:
-        return 0;
-      case OnboardingStep.birthDate:
-        return 1;
-      case OnboardingStep.gender:
-        return 2;
-      case OnboardingStep.nickname:
-        return 3;
-      case OnboardingStep.completed:
-        return 4;
-    }
-  }
-}
 
 /// 온보딩 상태
 @freezed
@@ -238,23 +183,76 @@ class OnboardingNotifier extends _$OnboardingNotifier {
     }
   }
 
+  // ============================================
+  // 닉네임 관련 상수
+  // ============================================
+  static const int _minNicknameLength = 2;
+  static const int _maxNicknameLength = 20;
+
+  /// 닉네임 유효성 검증 정규식 (한글, 영문, 숫자만 허용)
+  static final RegExp _nicknameRegex = RegExp(r'^[가-힣a-zA-Z0-9]+$');
+
   /// 닉네임 설정
   void setNickname(String nickname) {
     state = state.copyWith(
       nickname: nickname,
       nicknameAvailable: null, // 닉네임 변경 시 확인 상태 초기화
+      errorMessage: null,
     );
   }
 
+  /// 닉네임 유효성 검증
+  ///
+  /// **규칙**:
+  /// - 2~20자 이내
+  /// - 한글, 영문, 숫자만 사용 가능
+  /// - 특수문자 및 공백 불가
+  ///
+  /// Returns: 유효하면 null, 유효하지 않으면 에러 메시지
+  String? validateNickname(String? nickname) {
+    if (nickname == null || nickname.isEmpty) {
+      return '닉네임을 입력해주세요.';
+    }
+    if (nickname.length < _minNicknameLength) {
+      return '닉네임은 $_minNicknameLength자 이상이어야 합니다.';
+    }
+    if (nickname.length > _maxNicknameLength) {
+      return '닉네임은 $_maxNicknameLength자 이하여야 합니다.';
+    }
+    if (nickname.contains(' ')) {
+      return '닉네임에 공백을 사용할 수 없습니다.';
+    }
+    if (!_nicknameRegex.hasMatch(nickname)) {
+      return '닉네임은 한글, 영문, 숫자만 사용할 수 있습니다.';
+    }
+    return null; // 유효함
+  }
+
+  /// 닉네임이 유효한지 확인 (불린 반환)
+  bool isNicknameFormatValid(String? nickname) {
+    return validateNickname(nickname) == null;
+  }
+
   /// 닉네임 중복 확인
+  ///
+  /// 닉네임 형식이 유효한 경우에만 서버에 중복 확인 요청
   Future<bool> checkNickname() async {
     final nickname = state.nickname;
-    if (nickname == null || nickname.isEmpty) return false;
+
+    // 형식 유효성 검증 먼저 수행
+    final validationError = validateNickname(nickname);
+    if (validationError != null) {
+      state = state.copyWith(
+        nicknameAvailable: false,
+        errorMessage: validationError,
+      );
+      return false;
+    }
 
     state = state.copyWith(isLoading: true, errorMessage: null);
 
     try {
-      final response = await _repository.checkName(nickname);
+      final response = await _repository.checkName(nickname!);
 
       state = state.copyWith(
         isLoading: false,
@@ -277,6 +275,7 @@ class OnboardingNotifier extends _$OnboardingNotifier {
   bool get canSubmitNickname =>
       state.nickname != null &&
       state.nickname!.isNotEmpty &&
+      isNicknameFormatValid(state.nickname) &&
       state.nicknameAvailable == true;
 
   /// 프로필(닉네임) 제출

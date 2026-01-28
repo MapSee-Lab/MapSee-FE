@@ -14,13 +14,17 @@ import 'token_storage.dart';
 ///
 /// **동작**:
 /// 1. 401 에러 감지
-/// 2. Refresh Token으로 새 Access Token 요청
+/// 2. Refresh Token으로 새 Access Token 요청 (refreshDio 사용)
 /// 3. 새 토큰 저장
 /// 4. 원래 요청 재시도
 /// 5. Refresh Token도 만료된 경우 → 로그아웃 처리
+///
+/// **주의**: 토큰 갱신 요청 시 [_refreshDio]를 사용하여
+/// 인터셉터 순환 호출을 방지합니다.
 class TokenRefreshInterceptor extends Interceptor {
   final Ref _ref;
-  final Dio _dio;
+  final Dio _mainDio;
+  final Dio _refreshDio;
 
   /// 토큰 갱신 중 여부 (중복 갱신 방지)
   bool _isRefreshing = false;
@@ -29,7 +33,7 @@ class TokenRefreshInterceptor extends Interceptor {
   final List<({RequestOptions options, ErrorInterceptorHandler handler})>
       _pendingRequests = [];
 
-  TokenRefreshInterceptor(this._ref, this._dio);
+  TokenRefreshInterceptor(this._ref, this._mainDio, this._refreshDio);
 
   @override
   Future<void> onError(
@@ -99,13 +103,10 @@ class TokenRefreshInterceptor extends Interceptor {
         return false;
       }
 
-      // 토큰 갱신 요청 (인터셉터 순환 방지를 위해 별도 Dio 인스턴스 사용 권장)
-      final response = await _dio.post(
+      // 토큰 갱신 요청 (인터셉터 순환 방지를 위해 별도 Dio 인스턴스 사용)
+      final response = await _refreshDio.post(
         ApiEndpoints.reissue,
         data: {'refreshToken': refreshToken},
-        options: Options(
-          headers: {'Content-Type': 'application/json'},
-        ),
       );
 
       if (response.statusCode == 200 && response.data != null) {
@@ -136,7 +137,7 @@ class TokenRefreshInterceptor extends Interceptor {
     // 새 토큰으로 헤더 업데이트
     requestOptions.headers['Authorization'] = 'Bearer $newAccessToken';
 
-    return await _dio.fetch(requestOptions);
+    return await _mainDio.fetch(requestOptions);
   }
 
   /// 대기 중인 요청들 재시도

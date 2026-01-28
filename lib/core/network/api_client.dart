@@ -54,7 +54,9 @@ Dio dio(Ref ref) {
   dio.interceptors.add(AuthInterceptor(ref));
 
   // 3. 토큰 갱신 (401 → Refresh → 재시도)
-  dio.interceptors.add(TokenRefreshInterceptor(ref, dio));
+  // refreshDio를 별도로 사용하여 인터셉터 순환 방지
+  final refreshDio = ref.read(refreshDioProvider);
+  dio.interceptors.add(TokenRefreshInterceptor(ref, dio, refreshDio));
 
   // 4. 에러 변환 (DioException → AppException)
   dio.interceptors.add(ErrorInterceptor());

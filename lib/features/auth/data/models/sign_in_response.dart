@@ -1,5 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+// OnboardingStep은 통합 enum 사용
+export '../../domain/entities/onboarding_step.dart';
+
 part 'sign_in_response.freezed.dart';
 part 'sign_in_response.g.dart';
 
@@ -36,49 +39,4 @@ class SignInResponse with _$SignInResponse {
 
   factory SignInResponse.fromJson(Map<String, dynamic> json) =>
       _$SignInResponseFromJson(json);
-}
-
-/// 온보딩 단계 enum
-enum OnboardingStep {
-  terms,
-  birthDate,
-  gender,
-  nickname,
-  completed;
-
-  /// 서버 응답 문자열을 OnboardingStep으로 변환
-  static OnboardingStep? fromString(String? value) {
-    if (value == null) return null;
-
-    switch (value.toUpperCase()) {
-      case 'TERMS':
-        return OnboardingStep.terms;
-      case 'BIRTH_DATE':
-        return OnboardingStep.birthDate;
-      case 'GENDER':
-        return OnboardingStep.gender;
-      case 'NICKNAME':
-        return OnboardingStep.nickname;
-      case 'COMPLETED':
-        return OnboardingStep.completed;
-      default:
-        return null;
-    }
-  }
-
-  /// 라우트 경로로 변환
-  String toRoutePath() {
-    switch (this) {
-      case OnboardingStep.terms:
-        return '/onboarding/terms';
-      case OnboardingStep.birthDate:
-        return '/onboarding/birth-date';
-      case OnboardingStep.gender:
-        return '/onboarding/gender';
-      case OnboardingStep.nickname:
-        return '/onboarding/nickname';
-      case OnboardingStep.completed:
-        return '/home';
-    }
-  }
 }
