@@ -213,7 +213,7 @@ class DeviceInfoService {
   Future<DeviceInfo> getDeviceInfo() async {
     final deviceName = await getDeviceName();
     final deviceType = getDeviceType();
-    final deviceId = await DeviceIdManager.getDeviceId();
+    final deviceId = await DeviceIdManager.getOrCreateDeviceId();
     final osVersion = await getOSVersion();
     final physical = await isPhysicalDevice();
 
