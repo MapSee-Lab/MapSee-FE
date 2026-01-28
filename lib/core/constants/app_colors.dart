@@ -35,6 +35,40 @@ class AppColors {
   static const Color robberTeam = Color(0xFFE53935);
 
   // ============================================
+  // Gray 스케일 색상 (Gray Scale Colors)
+  // ============================================
+
+  /// Gray 50 - 가장 밝은 회색
+  static const Color gray50 = Color(0xFFFAFAFA);
+
+  /// Gray 100
+  static const Color gray100 = Color(0xFFF5F5F5);
+
+  /// Gray 200
+  static const Color gray200 = Color(0xFFEEEEEE);
+
+  /// Gray 300
+  static const Color gray300 = Color(0xFFE0E0E0);
+
+  /// Gray 400
+  static const Color gray400 = Color(0xFFBDBDBD);
+
+  /// Gray 500
+  static const Color gray500 = Color(0xFF9E9E9E);
+
+  /// Gray 600
+  static const Color gray600 = Color(0xFF757575);
+
+  /// Gray 700
+  static const Color gray700 = Color(0xFF616161);
+
+  /// Gray 800
+  static const Color gray800 = Color(0xFF424242);
+
+  /// Gray 900 - 가장 어두운 회색
+  static const Color gray900 = Color(0xFF212121);
+
+  // ============================================
   // 배경 색상 (Background Colors)
   // ============================================
 

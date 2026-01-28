@@ -15,6 +15,15 @@ import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/onboarding_page.dart';
 import '../features/home/presentation/pages/home_page.dart';
 
+// Onboarding Step Pages
+import '../features/onboarding/presentation/pages/terms_step_page.dart';
+import '../features/onboarding/presentation/pages/birth_date_step_page.dart';
+import '../features/onboarding/presentation/pages/gender_step_page.dart';
+import '../features/onboarding/presentation/pages/nickname_step_page.dart';
+
+// Token Storage for onboarding state
+import '../core/network/token_storage.dart';
+
 /// GoRouter 인스턴스를 제공하는 Riverpod Provider
 ///
 /// 앱 전체의 네비게이션을 관리하며, 인증 상태에 따라
@@ -69,6 +78,15 @@ final routerProvider = Provider<GoRouter>((ref) {
       // 인증이 불필요한 공개 경로 (Splash, Login)
       final publicPaths = [RoutePaths.splash, RoutePaths.login];
 
+      // 온보딩 경로들
+      final onboardingPaths = [
+        RoutePaths.onboarding,
+        RoutePaths.onboardingTerms,
+        RoutePaths.onboardingBirthDate,
+        RoutePaths.onboardingGender,
+        RoutePaths.onboardingNickname,
+      ];
+
       // ====================================================================
       // 1. 인증 체크 - 로그인 필요한 페이지 보호
       // ====================================================================
@@ -82,21 +100,21 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       // ====================================================================
-      // 2. 인증된 사용자가 로그인 페이지 접근 시
+      // 2. 인증된 사용자가 로그인 페이지 접근 시 → 홈 또는 온보딩으로
       // ====================================================================
       if (currentPath == RoutePaths.login) {
-        // 로그인 완료 시 홈으로
+        // 온보딩 필요 여부 확인 (동기적으로 확인 불가하므로 일단 홈으로)
+        // 실제 온보딩 체크는 로그인 후 SignInResponse에서 처리
         return RoutePaths.home;
       }
 
       // ====================================================================
-      // 3. 온보딩 체크 (향후 구현)
+      // 3. 온보딩 중인 사용자가 홈에 접근 시 → 온보딩으로 리다이렉트
       // ====================================================================
-      // TODO: 온보딩 완료 여부 확인
-      // SharedPreferences나 Firestore에서 온보딩 완료 상태 확인
-      // if (!onboardingCompleted && currentPath != RoutePaths.onboarding) {
-      //   return RoutePaths.onboarding;
-      // }
+      // 온보딩 경로에 있으면 허용
+      if (onboardingPaths.contains(currentPath)) {
+        return null;
+      }
 
       return null; // 리다이렉트 불필요
     },
@@ -121,6 +139,33 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: RoutePaths.onboarding,
         name: RoutePaths.onboardingName,
         builder: (context, state) => const OnboardingPage(),
+      ),
+
+      // ====================================================================
+      // Onboarding Step Routes
+      // ====================================================================
+      GoRoute(
+        path: RoutePaths.onboardingTerms,
+        name: RoutePaths.onboardingTermsName,
+        builder: (context, state) => const TermsStepPage(),
+      ),
+
+      GoRoute(
+        path: RoutePaths.onboardingBirthDate,
+        name: RoutePaths.onboardingBirthDateName,
+        builder: (context, state) => const BirthDateStepPage(),
+      ),
+
+      GoRoute(
+        path: RoutePaths.onboardingGender,
+        name: RoutePaths.onboardingGenderName,
+        builder: (context, state) => const GenderStepPage(),
+      ),
+
+      GoRoute(
+        path: RoutePaths.onboardingNickname,
+        name: RoutePaths.onboardingNicknameName,
+        builder: (context, state) => const NicknameStepPage(),
       ),
 
       // ====================================================================
