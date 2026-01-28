@@ -71,3 +71,12 @@ android/app/keystore/
 
 # Play Store CI/CD - 민감한 파일 (자동 생성됨)
 .env.*.local
+
+# iOS CI/CD - 민감한 파일 (자동 생성됨)
+ios/*.mobileprovision
+ios/fastlane/*.p8
+ios/fastlane/*.p12
+
+# Android CI/CD - 민감한 파일 (자동 생성됨)
+android/fastlane/service-account.json
+
